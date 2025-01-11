@@ -26,7 +26,7 @@ const Navber = () => {
         <li><Link to='/'>Home</Link></li>
         <li><Link to='/manu'>Our Manu</Link></li>
         <li><Link to='/order/salad'>Order Food</Link></li>
-        <li><Link to='/'>
+        <li><Link to='/dashboard/cart'>
             <button className="flex items-center text-base">
                 <FaShoppingCart></FaShoppingCart>
                 <div className="badge badge-secondary ml-2">+{cart.length}</div>

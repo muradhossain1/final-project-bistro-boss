@@ -4,11 +4,14 @@ import { useForm } from "react-hook-form"
 import { AuthContext } from "../../provider/AuthProvider";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import SocialLogin from "../../Components/socialLogin";
 
 
 
 const SingUp = () => {
-    const { register, handleSubmit,reset, formState: { errors }, } = useForm()
+    const axiosPublic = useAxiosPublic();
+    const { register, handleSubmit, reset, formState: { errors }, } = useForm()
     const { createUser, updateUserProfile } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -19,16 +22,27 @@ const SingUp = () => {
                 const loggedUser = result.user;
                 console.log(loggedUser)
                 updateUserProfile(data.name, data.photoURL)
-                .then(() => {
-                    Swal.fire({
-                        title: 'success!',
-                        text: 'Sign up successful!!',
-                        icon: 'success',
-                        confirmButtonText: 'Done'
+                    .then(() => {
+                        // create user entry in the database
+                        const userinfo = {
+                            name: data.name,
+                            email: data.email
+                        }
+                        axiosPublic.post('/users', userinfo)
+                            .then(res => {
+                                if (res.data.insertedId) {
+                                    console.log('user add database')
+                                    reset()
+                                    Swal.fire({
+                                        title: 'success!',
+                                        text: 'Sign up successful!!',
+                                        icon: 'success',
+                                        confirmButtonText: 'Done'
+                                    })
+                                    navigate('/')
+                                }
+                            })
                     })
-                    reset()
-                    navigate('/')
-                })
             })
     }
 
@@ -93,7 +107,8 @@ const SingUp = () => {
                                 <input className="btn btn-primary" type="submit" value="SingUp" />
                             </div>
                         </form>
-                        <p><small>Already Have an account? <Link to='/login'>Login</Link></small></p>
+                        <p className="px-6"><small>Already Have an account? <Link to='/login'>Login</Link></small></p>
+                        <SocialLogin></SocialLogin>
                     </div>
                 </div>
             </div>
