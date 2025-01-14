@@ -8,7 +8,6 @@ const Deshboard = () => {
 
     //todo: get isAdmin value from the database
     const [isAdmin]= useAdmin();
-    console.log(isAdmin)
     return (
         <div className="flex">
             {/* deshboard side bar */}
