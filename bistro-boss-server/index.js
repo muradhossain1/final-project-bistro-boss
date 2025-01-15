@@ -204,11 +204,21 @@ async function run() {
             })
         })
 
+        app.get('/payment/:email', verifyToken, async (req, res) => {
+            const email = req.params.email
+            const query = { email: email}
+            if(email !== req.decoded.email){
+                return res.status(403).send({ massage: 'forbidden  access' })
+            }
+            const result = await paymentCollections.find(query).toArray()
+            res.send(result);
+        })
+
         app.post('/payments', async (req, res) => {
             const payment = req.body;
             const paymentResult = await paymentCollections.insertOne(payment);
             //carefully delete each item from the cart
-            console.log('payment info', payment)
+            // console.log('payment info', payment)
             const query = { _id: {
                 $in: payment.cartIds.map(id => new ObjectId(id))
             }}

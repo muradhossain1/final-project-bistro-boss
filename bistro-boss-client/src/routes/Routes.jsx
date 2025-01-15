@@ -16,6 +16,7 @@ import AdminRoutes from "./AdminRoutes";
 import MangeItems from "../Pages/deshboard/MangeItems";
 import UpdateItem from "../Pages/deshboard/UpdateItem";
 import Payment from "../Pages/deshboard/Payment";
+import PaymentHistory from "../Pages/deshboard/PaymentHistory";
 
 export const Router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ export const Router = createBrowserRouter([
       {
         path: "payment",
         element: <Payment></Payment>
+      },
+      {
+        path: "paymentHistory",
+        element: <PaymentHistory></PaymentHistory>
       },
 
       //admin routes

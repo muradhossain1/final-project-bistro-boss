@@ -22,10 +22,10 @@ const Deshboard = () => {
                             <li><NavLink to="/dashBoard/users"><FaUsers></FaUsers> All users</NavLink></li>
                         </> : <>
                             <li><NavLink to="/dashBoard/userHome"><FaHome></FaHome> User Home</NavLink></li>
-                            <li><NavLink to="/dashBoard/reservation"><FaCalendar></FaCalendar> Reservation</NavLink></li>
+                            <li><NavLink to="/dashBoard/history"><FaCalendar></FaCalendar> Not History</NavLink></li>
                             <li><NavLink to="/dashBoard/cart"><FaShoppingCart></FaShoppingCart> My Cart ({cart.length})</NavLink></li>
                             <li><NavLink to="/dashBoard/review"><FaAd></FaAd> Add Review</NavLink></li>
-                            <li><NavLink to="/dashBoard/booking"><FaList></FaList> My Booking</NavLink></li>
+                            <li><NavLink to="/dashBoard/paymentHistory"><FaList></FaList> Real Payment History</NavLink></li>
                         </>
                     }
                     {/* shared navlinks */}
