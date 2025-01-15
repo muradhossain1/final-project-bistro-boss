@@ -15,6 +15,7 @@ import AddItems from "../Pages/deshboard/AddItems";
 import AdminRoutes from "./AdminRoutes";
 import MangeItems from "../Pages/deshboard/MangeItems";
 import UpdateItem from "../Pages/deshboard/UpdateItem";
+import Payment from "../Pages/deshboard/Payment";
 
 export const Router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ export const Router = createBrowserRouter([
       {
         path: "cart",
         element: <Cart></Cart>
+      },
+      {
+        path: "payment",
+        element: <Payment></Payment>
       },
 
       //admin routes

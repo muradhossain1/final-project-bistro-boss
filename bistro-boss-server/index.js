@@ -3,6 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 const jwt = require('jsonwebtoken')
 const app = express();
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const port = process.env.PORT || 5000
 
 app.use(cors())
@@ -31,17 +32,18 @@ async function run() {
         const menuCollections = client.db('bistroDB').collection('menu')
         const reviewCollections = client.db('bistroDB').collection('reviews')
         const cartCollections = client.db('bistroDB').collection('carts')
+        const paymentCollections = client.db('bistroDB').collection('payments')
 
         //jwt apis
         app.post('/jwt', async (req, res) => {
             const user = req.body;
-            const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
+            const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
             res.send({ token })
         })
 
         //middlewere
         const verifyToken = (req, res, next) => {
-            console.log('inside verifyToken', req.headers.authorization)
+            // console.log('inside verifyToken', req.headers.authorization)
             if (!req.headers.authorization) {
                 return res.status(401).send({ massage: 'unauthorized access' })
             }
@@ -184,6 +186,35 @@ async function run() {
             const query = { _id: new ObjectId(id) };
             const result = await cartCollections.deleteOne(query)
             res.send(result);
+        })
+
+        // payment intent
+        app.post('/create-payment-intent', async(req, res) => {
+            const {price} = req.body;
+            const amount = parseInt(price * 100)
+
+            const paymentIntent = await stripe.paymentIntents.create({
+                amount: amount,
+                currency: 'usd',
+                payment_method_types: ['card']
+            })
+
+            res.send({
+                clientSecret: paymentIntent.client_secret
+            })
+        })
+
+        app.post('/payments', async (req, res) => {
+            const payment = req.body;
+            const paymentResult = await paymentCollections.insertOne(payment);
+            //carefully delete each item from the cart
+            console.log('payment info', payment)
+            const query = { _id: {
+                $in: payment.cartIds.map(id => new ObjectId(id))
+            }}
+            const deleteResult = await cartCollections.deleteMany(query);
+
+            res.send({paymentResult, deleteResult})
         })
 
 
