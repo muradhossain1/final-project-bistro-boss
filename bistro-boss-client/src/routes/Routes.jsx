@@ -17,6 +17,8 @@ import MangeItems from "../Pages/deshboard/MangeItems";
 import UpdateItem from "../Pages/deshboard/UpdateItem";
 import Payment from "../Pages/deshboard/Payment";
 import PaymentHistory from "../Pages/deshboard/PaymentHistory";
+import UserHome from "../Pages/deshboard/UserHome";
+import AdminHome from "../Pages/deshboard/AdminHome";
 
 export const Router = createBrowserRouter([
   {
@@ -51,6 +53,10 @@ export const Router = createBrowserRouter([
     children: [
       // normal user
       {
+        path: "userHome",
+        element: <UserHome></UserHome>
+      },
+      {
         path: "cart",
         element: <Cart></Cart>
       },
@@ -64,6 +70,10 @@ export const Router = createBrowserRouter([
       },
 
       //admin routes
+      {
+        path: 'adminHome',
+        element: <AdminRoutes><AdminHome></AdminHome></AdminRoutes>
+      },
       {
         path: 'addItems',
         element: <AdminRoutes><AddItems></AddItems></AdminRoutes>
@@ -79,7 +89,7 @@ export const Router = createBrowserRouter([
       {
         path: 'updateItem/:id',
         element: <AdminRoutes><UpdateItem></UpdateItem></AdminRoutes>,
-        loader: ({ params }) => fetch(`http://localhost:5000/menu/${params.id}`)
+        loader: ({ params }) => fetch(`https://bistro-boss-server-pro.vercel.app/menu/${params.id}`)
       },
     ]
   },
